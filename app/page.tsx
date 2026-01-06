@@ -65,15 +65,15 @@ function HomeContent() {
               <span className="text-white">DRIFT</span>
               <span className="text-orange-500">WHEELS</span>
             </h1>
-            <p className="text-sm md:text-base text-gray-500 font-mono mt-2 tracking-widest uppercase">
+            {/* <p className="text-sm md:text-base text-gray-500 font-mono mt-2 tracking-widest uppercase">
               Professional Telemetry System
-            </p>
+            </p> */}
           </div>
           
-          <p className="text-xl text-gray-300 leading-relaxed max-w-lg mx-auto">
+          {/* <p className="text-xl text-gray-300 leading-relaxed max-w-lg mx-auto">
             A telemetria profissional para pilotos de Drift no seu bolso. 
             Meça ângulo, velocidade e Força G em tempo real.
-          </p>
+          </p> */}
 
           {/* Grid de Features */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mt-8">
