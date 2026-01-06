@@ -76,7 +76,7 @@ function HomeContent() {
           </p> */}
 
           {/* Grid de Features */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mt-8">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mt-8">
             <div className="p-6 border border-gray-800 rounded-2xl bg-gray-900/50 hover:border-orange-500/50 transition-colors">
               <h3 className="font-bold text-xl mb-1 text-orange-400">📊 Telemetria</h3>
               <p className="text-sm text-gray-500">Análise detalhada de cada curva e transição.</p>
@@ -85,7 +85,7 @@ function HomeContent() {
               <h3 className="font-bold text-xl mb-1 text-orange-400">🏆 Ranking</h3>
               <p className="text-sm text-gray-500">Dispute com pilotos de todo o mundo.</p>
             </div>
-          </div>
+          </div> */}
 
           {/* Botões das Lojas (Desativados por enquanto) */}
           <div className="pt-12">
