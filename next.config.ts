@@ -10,25 +10,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-
-  // 2. HEADERS: Força o navegador a renderizar o HTML (Resolve o problema do código na tela)
-  async headers() {
-    return [
-      {
-        source: '/share/:path*', // Aplica a qualquer rota dentro de /share/
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'text/html; charset=utf-8', 
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-        ],
-      },
-    ];
-  },
 };
 
 export default nextConfig;
