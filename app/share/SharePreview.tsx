@@ -29,7 +29,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
   const IconHeart = () => <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>;
   const IconMessage = () => <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>;
   const IconShare = () => <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>;
-  const IconDrift = () => <svg width="20" height="20" fill="#FCA311" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.95 1.48-1.08 6.6 6.37-3.18L12 22l-8.24-6.1 6.37 3.18-1.08-6.6L12 11z"/></svg>;
+  const IconDrift = () => <svg width="20" height="20" fill="#FF4500" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.95 1.48-1.08 6.6 6.37-3.18L12 22l-8.24-6.1 6.37 3.18-1.08-6.6L12 11z"/></svg>;
 
   return (
     <div style={{
@@ -45,7 +45,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         alignItems: 'center', justifyContent: 'center',
         position: 'sticky', top: 0, backgroundColor: '#000', zIndex: 10
       }}>
-        <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#FCA311', letterSpacing: '1px' }}>DRIFTWHEELS</span>
+        <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#FF4500', letterSpacing: '1px' }}>DRIFTWHEELS</span>
       </div>
 
       {/* --- VISUALIZAÇÃO DE POST --- */}
@@ -100,7 +100,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         <div style={{ width: '100%', maxWidth: '500px', padding: '30px 20px', textAlign: 'center' }}>
             <img 
               src={data.image || "https://driftwheels.app/assets/logo.png"} 
-              style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #FCA311' }} 
+              style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #FF4500' }} 
             />
             <h1 style={{ marginTop: '15px', fontSize: '22px', fontWeight: 'bold' }}>{data.username}</h1>
             <p style={{ color: '#888', fontSize: '14px', marginTop: '5px' }}>{data.car}</p>
@@ -114,7 +114,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
             
             <button 
                 onClick={handleInteraction}
-                style={{ marginTop: '30px', width: '100%', padding: '14px', backgroundColor: '#FCA311', color:'#000', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize:'14px' }}
+                style={{ marginTop: '30px', width: '100%', padding: '14px', backgroundColor: '#FF4500', color:'#000', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize:'14px' }}
             >
                 Ver Perfil Completo no App
             </button>
@@ -135,12 +135,12 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                 </div>
                 <div style={{ marginLeft: '12px' }}>
                     <div style={{ fontSize: '14px', fontWeight: 'bold', color:'#fff' }}>DriftWheels</div>
-                    <div style={{ fontSize: '11px', color: '#FCA311' }}>Comunidade de Drift</div>
+                    <div style={{ fontSize: '11px', color: '#FF4500' }}>Comunidade de Drift</div>
                 </div>
             </div>
             <button 
                 onClick={() => window.location.href = appScheme}
-                style={{ backgroundColor: '#FCA311', color: '#000', border: 'none', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer' }}
+                style={{ backgroundColor: '#FF4500', color: '#000', border: 'none', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer' }}
             >
                 ABRIR
             </button>
@@ -161,7 +161,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
             border: '1px solid #333', boxShadow: '0 10px 40px rgba(0,0,0,0.7)'
           }} onClick={e => e.stopPropagation()}>
             
-            <div style={{ width: '60px', height: '60px', borderRadius: '15px', backgroundColor:'#000', border:'1px solid #FCA311', margin:'0 auto 20px', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <div style={{ width: '60px', height: '60px', borderRadius: '15px', backgroundColor:'#000', border:'1px solid #FF4500', margin:'0 auto 20px', display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <IconDrift />
             </div>
             
@@ -172,7 +172,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
 
             <a href={fallbackUrl} style={{
               display: 'block', width: '100%', padding: '14px',
-              backgroundColor: '#FCA311', color: '#000',
+              backgroundColor: '#FF4500', color: '#000',
               textDecoration: 'none', fontWeight: 'bold', borderRadius: '10px',
               marginBottom: '15px', fontSize:'14px'
             }}>
