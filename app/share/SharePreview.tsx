@@ -45,7 +45,19 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         alignItems: 'center', justifyContent: 'center',
         position: 'sticky', top: 0, backgroundColor: '#000', zIndex: 10
       }}>
-        <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#FF4500', letterSpacing: '1px' }}>DRIFTWHEELS</span>
+        {/* ANTES ERA ASSIM: */}
+        {/* <span style={{ fontWeight: 'bold', fontSize: '16px', color: '#FCA311', letterSpacing: '1px' }}>DRIFTWHEELS</span> */}
+        
+        {/* AGORA FICA ASSIM (Imagem): */}
+        <img 
+          src="/assets/logo.png" 
+          alt="DriftWheels" 
+          style={{ 
+            height: '28px',       // Altura fixa para não estourar o header
+            maxWidth: '150px',    // Largura máxima de segurança
+            objectFit: 'contain'  // Garante que a logo não distorça
+          }} 
+        />
       </div>
 
       {/* --- VISUALIZAÇÃO DE POST --- */}
@@ -55,7 +67,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
           {/* Cabeçalho do Post */}
           <div style={{ display: 'flex', alignItems: 'center', padding: '10px 15px' }}>
             <img 
-              src={data.avatar || "https://driftwheels.app/assets/logo.png"} 
+              src={data.avatar || "https://driftwheels.app/assets/logo_esticado.png"} 
               style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #333' }} 
             />
             <div style={{ marginLeft: '10px', display:'flex', flexDirection:'column' }}>
@@ -130,9 +142,17 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
             justifyContent: 'space-between', zIndex: 50, maxWidth: '500px', margin: '0 auto'
         }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#000', border: '1px solid #333', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <IconDrift />
-                </div>
+                <img 
+                    src="/assets/logo.png" 
+                    alt="Icon"
+                    style={{ 
+                        width: '40px', height: '40px', 
+                        borderRadius: '8px', 
+                        objectFit: 'cover', // ou 'contain' se quiser ver a logo inteira sem cortar
+                        border: '1px solid #333',
+                        backgroundColor: '#000' 
+                    }} 
+                />
                 <div style={{ marginLeft: '12px' }}>
                     <div style={{ fontSize: '14px', fontWeight: 'bold', color:'#fff' }}>DriftWheels</div>
                     <div style={{ fontSize: '11px', color: '#FF4500' }}>Comunidade de Drift</div>
@@ -161,9 +181,19 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
             border: '1px solid #333', boxShadow: '0 10px 40px rgba(0,0,0,0.7)'
           }} onClick={e => e.stopPropagation()}>
             
-            <div style={{ width: '60px', height: '60px', borderRadius: '15px', backgroundColor:'#000', border:'1px solid #FF4500', margin:'0 auto 20px', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                <IconDrift />
-            </div>
+            <img 
+                src="/assets/logo.png"
+                alt="Logo"
+                style={{ 
+                    width: '60px', height: '60px', 
+                    borderRadius: '15px', 
+                    objectFit: 'cover', // ou 'contain'
+                    backgroundColor:'#000', 
+                    border:'1px solid #FCA311', 
+                    margin:'0 auto 20px', 
+                    display:'block' 
+                }} 
+            />
             
             <h2 style={{ fontSize: '20px', marginBottom: '10px', fontWeight:'bold' }}>Baixe o App</h2>
             <p style={{ fontSize: '14px', color: '#aaa', marginBottom: '30px', lineHeight: '1.5' }}>
