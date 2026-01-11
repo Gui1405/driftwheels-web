@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import SharePreview from '../../SharePreview';
 
 // --- CONFIGURAÇÕES ---
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = "https://xowanwpfduspyptmblkm.supabase.co";
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const SUPABASE_STORAGE_URL = `${supabaseUrl}/storage/v1/object/public`;
 
