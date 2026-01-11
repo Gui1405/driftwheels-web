@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 // --- CONFIGURAÇÕES ---
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+// Tenta usar a Service Role (para pular RLS), se não tiver, usa a Anon Key
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 // URL Base do Storage (Geralmente é: URL_DO_PROJETO + /storage/v1/object/public)
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         .single();
       
       if (post) {
-        // Pega o nome do usuário
+        // Pega o nome do usuário (trata array ou objeto)
         const profile: any = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
         title = `Post de ${profile?.username || "Piloto"}`;
         
@@ -46,12 +47,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         // LÓGICA DA FOTO DO POST
         if (post.image_url) {
-            // Se já for um link completo, usa ele. 
-            // Se for apenas o caminho (ex: "posts/123.jpg"), monta o link público.
             if (post.image_url.startsWith('http')) {
                 imageUrl = post.image_url;
             } else {
-                // ATENÇÃO: Verifique se o nome do seu bucket é 'posts' ou 'feed'
+                // Bucket 'posts'
                 imageUrl = `${SUPABASE_STORAGE_URL}/posts/${post.image_url}`;
             }
         }
@@ -73,7 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
              if (profile.avatar_url.startsWith('http')) {
                 imageUrl = profile.avatar_url;
             } else {
-                // Bucket de avatares geralmente chama 'avatars'
+                // Bucket 'avatars'
                 imageUrl = `${SUPABASE_STORAGE_URL}/avatars/${profile.avatar_url}`;
             }
         }
@@ -89,6 +88,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         if (party) {
             const date = new Date(party.date_time).toLocaleDateString('pt-BR');
+            
+            // Tratamento de segurança para o relacionamento tracks (pode vir array ou objeto)
             const trackData: any = party.tracks;
             const trackName = Array.isArray(trackData) ? trackData[0]?.name : trackData?.name;
             const trackImage = Array.isArray(trackData) ? trackData[0]?.image_url : trackData?.image_url;
@@ -101,7 +102,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
                  if (trackImage.startsWith('http')) {
                     imageUrl = trackImage;
                 } else {
-                    // Verifique o nome do bucket de pistas (ex: 'tracks')
+                    // Bucket 'tracks'
                     imageUrl = `${SUPABASE_STORAGE_URL}/tracks/${trackImage}`;
                 }
             }
@@ -123,7 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: 'DriftWheels',
       images: [
         {
-          url: imageUrl, // Aqui vai a URL final da foto do post
+          url: imageUrl, // URL absoluta gerada acima
           width: 800,
           height: 800,
           alt: title,
@@ -132,7 +133,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'website',
     },
     twitter: {
-      card: 'summary', // Importante para imagem + texto lado a lado
+      card: 'summary', // 'summary' para miniatura pequena, 'summary_large_image' para grande
       title: title,
       description: description,
       images: [imageUrl],
@@ -189,6 +190,7 @@ export default async function SharePage({ params }: Props) {
             window.location.replace(appUrl);
 
             // 2. Timer de fallback (1s)
+            // Se o navegador não for minimizado (o app não abriu), redireciona pro site
             setTimeout(function() {
               if (!document.hidden) {
                  window.location.replace(webUrl);
