@@ -2,8 +2,9 @@ import { Metadata } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
 // Configurações do Supabase
+// IMPORTANTE: Certifique-se de que essas variáveis estão no .env.local ou na Vercel
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 interface Props {
   params: Promise<{
@@ -12,16 +13,18 @@ interface Props {
   }>;
 }
 
-// 1. GERAR METADADOS DINÂMICOS
+// 1. GERAR METADADOS DINÂMICOS (Isso cria a miniatura)
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { type, id } = await params;
   const supabase = createClient(supabaseUrl, supabaseKey);
   
   let title = "DriftWheels";
   let description = "Comunidade de Drift e Performance";
-  let imageUrl = "https://driftwheels.app/assets/logo.png";
+  // Use uma imagem padrão quadrada para ficar bom no WhatsApp
+  let imageUrl = "https://driftwheels.app/assets/logo.png"; 
 
   try {
+    // --- LÓGICA DE POST ---
     if (type === "post") {
       const { data: post } = await supabase
         .from("posts")
@@ -30,13 +33,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         .single();
       
       if (post) {
-        // Correção de tipagem: acessando o username de forma segura
-        const profile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
+        const profile: any = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
         title = `Post de ${profile?.username || "Piloto"}`;
-        description = post.caption || description;
+        // Corta a descrição se for muito longa
+        description = post.caption 
+            ? (post.caption.length > 100 ? post.caption.substring(0, 97) + "..." : post.caption)
+            : description;
         if (post.image_url) imageUrl = post.image_url;
       }
-    } else if (type === "profile") {
+    } 
+    // --- LÓGICA DE PERFIL ---
+    else if (type === "profile") {
       const { data: profile } = await supabase
         .from("profiles")
         .select("username, car_model, avatar_url")
@@ -49,74 +56,131 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         if (profile.avatar_url) imageUrl = profile.avatar_url;
       }
     }
+    // --- LÓGICA DE SESSÃO (PARTY) ---
+    // --- LÓGICA DE SESSÃO (PARTY) ---
+    else if (type === "party") {
+        const { data: party } = await supabase
+            .from("parties")
+            .select("name, date_time, tracks(name)")
+            .eq("id", id)
+            .single();
+
+        if (party) {
+            const date = new Date(party.date_time).toLocaleDateString('pt-BR');
+            
+            // CORREÇÃO AQUI:
+            // Verifica se 'tracks' é uma lista (array) e pega o primeiro, ou usa direto se for objeto
+            const trackData: any = party.tracks;
+            const trackName = Array.isArray(trackData) ? trackData[0]?.name : trackData?.name;
+
+            title = `Sessão: ${party.name}`;
+            description = `Venha correr em ${trackName || "uma pista"}! Dia ${date}.`;
+        }
+    }
+
   } catch (e) {
     console.error("Erro ao buscar metadados:", e);
   }
 
   return {
-    title,
-    description,
+    title: title,
+    description: description,
+    // Configuração Open Graph (Facebook, LinkedIn, etc)
     openGraph: {
-      title,
-      description,
-      images: [imageUrl],
+      title: title,
+      description: description,
+      url: `https://driftwheels.app/share/${type}/${id}`,
+      siteName: 'DriftWheels',
+      images: [
+        {
+          url: imageUrl,
+          width: 800,  // Dimensões recomendadas
+          height: 800, // Quadrado funciona melhor para o resumo
+          alt: title,
+        },
+      ],
       type: 'website',
+    },
+    // Configuração Twitter (Essencial para WhatsApp exibir a imagem pequena ao lado)
+    twitter: {
+      card: 'summary', // 'summary' = imagem pequena lado esquerdo. 'summary_large_image' = imagem grande.
+      title: title,
+      description: description,
+      images: [imageUrl],
     },
   };
 }
 
-// 2. COMPONENTE DA PÁGINA
+// 2. COMPONENTE DA PÁGINA (Redirecionamento Visual)
 export default async function SharePage({ params }: Props) {
   const { type, id } = await params;
+  
+  // Links
   const appScheme = `driftwheels://${type}/${id}`;
   const fallbackUrl = "https://driftwheels.app";
 
   return (
     <div style={{
       margin: 0, padding: 0,
-      fontFamily: '-apple-system, sans-serif',
-      background: 'linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%)',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      background: '#000', // Fundo preto sólido carrega mais rápido visualmente
       color: '#fff',
       minHeight: '100vh',
-      display: 'flex', justifyContent: 'center', alignItems: 'center', // Corrigido: 'center' entre aspas
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'center', 
+      alignItems: 'center',
       textAlign: 'center'
     }}>
-      <div style={{ padding: '20px', maxWidth: '500px', width: '100%' }}>
-        <img 
-          src="https://driftwheels.app/assets/logo.png" 
-          alt="Logo" 
-          style={{ width: '120px', height: '120px', borderRadius: '20px', border: '3px solid #FCA311', marginBottom: '20px' }} 
-        />
-        <h1>Abrindo o DriftWheels...</h1>
-        <p style={{ color: '#aaa' }}>Você está sendo redirecionado.</p>
+      <div style={{ padding: '20px', maxWidth: '400px', width: '100%' }}>
         
-        <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '10px', padding: '20px', margin: '20px 0', border: '1px solid #333' }}>
-          <div style={{
+        {/* Loader Animado CSS */}
+        <div style={{
             width: '40px', height: '40px',
-            border: '4px solid rgba(252, 163, 17, 0.2)',
+            border: '4px solid #333',
             borderTop: '4px solid #FCA311',
             borderRadius: '50%',
-            margin: '0 auto 15px',
-          }}></div>
-          <p>Tentando abrir o app...</p>
-        </div>
+            margin: '0 auto 20px',
+            animation: 'spin 1s linear infinite'
+        }}></div>
+        <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
 
-        <a href={fallbackUrl} style={{
-          display: 'inline-block', padding: '15px 30px', background: '#FCA311', color: '#000',
-          textDecoration: 'none', borderRadius: '10px', fontWeight: 'bold', margin: '10px', minWidth: '200px'
+        <h1 style={{ color: '#FCA311', fontSize: '20px', marginBottom: '10px' }}>DriftWheels</h1>
+        <p style={{ color: '#888', fontSize: '14px', marginBottom: '30px' }}>Redirecionando...</p>
+        
+        <a href={appScheme} style={{
+          display: 'block', width: '100%', padding: '15px 0', 
+          background: '#FCA311', color: '#000',
+          textDecoration: 'none', borderRadius: '12px', fontWeight: 'bold', 
+          marginBottom: '15px', textTransform: 'uppercase'
         }}>
-          Abrir no Navegador
+          Abrir no App
         </a>
 
-        {/* Script de redirecionamento injetado no cliente */}
+        <a href={fallbackUrl} style={{
+          color: '#666', textDecoration: 'underline', fontSize: '13px'
+        }}>
+          Ir para o site
+        </a>
+
+        {/* SCRIPT DE REDIRECIONAMENTO INTELIGENTE 
+            Tenta abrir o app. Se a página continuar visível após 1.5s, vai pro site.
+        */}
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {
-            const APP_URL = "${appScheme}";
-            const WEB_URL = "${fallbackUrl}";
-            window.location.href = APP_URL;
-            setTimeout(() => {
-              window.location.href = WEB_URL;
-            }, 3000);
+            var appUrl = "${appScheme}";
+            var webUrl = "${fallbackUrl}";
+            
+            // 1. Tenta abrir o App imediatamente
+            window.location.replace(appUrl);
+
+            // 2. Timer de fallback
+            setTimeout(function() {
+              // Se o documento ainda estiver visível (significa que o app não abriu por cima)
+              if (!document.hidden) {
+                 window.location.replace(webUrl);
+              }
+            }, 1500);
           })();
         `}} />
       </div>
