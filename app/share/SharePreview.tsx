@@ -50,7 +50,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         
         {/* AGORA FICA ASSIM (Imagem): */}
         <img 
-          src="/assets/logo.png" 
+          src="/assets/logo_esticado.png" 
           alt="DriftWheels" 
           style={{ 
             height: '28px',       // Altura fixa para não estourar o header
@@ -67,7 +67,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
           {/* Cabeçalho do Post */}
           <div style={{ display: 'flex', alignItems: 'center', padding: '10px 15px' }}>
             <img 
-              src={data.avatar || "https://driftwheels.app/assets/logo_esticado.png"} 
+              src={data.avatar || "https://driftwheels.app/assets/logo.png"} 
               style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #333' }} 
             />
             <div style={{ marginLeft: '10px', display:'flex', flexDirection:'column' }}>
