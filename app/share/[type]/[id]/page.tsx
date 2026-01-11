@@ -4,7 +4,7 @@ import SharePreview from '../../SharePreview';
 
 // --- CONFIGURAÇÕES ---
 const supabaseUrl = "https://xowanwpfduspyptmblkm.supabase.co";
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseKey = "sb_publishable_B-cmdHFBrMDTEYUQexQkzQ_5nWitu-_";
 const SUPABASE_STORAGE_URL = `${supabaseUrl}/storage/v1/object/public`;
 
 interface Props {
