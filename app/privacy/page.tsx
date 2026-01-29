@@ -71,9 +71,14 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-3">4. Exclusão de Dados</h2>
-            <p>Você pode solicitar a exclusão completa da sua conta e dados diretamente no aplicativo em: <em>Perfil &gt; Configurações &gt; Zona de Perigo &gt; Deletar Conta</em>. </p>
-          </section>
+  <h2 className="text-2xl font-bold text-white mb-3">4. Exclusão de Dados</h2>
+  <p className="mb-2">
+    Você pode solicitar a exclusão completa da sua conta e dados diretamente no aplicativo em: <em>Perfil &gt; Configurações &gt; Zona de Perigo &gt; Deletar Conta</em>.
+  </p>
+  <p>
+    Alternativamente, caso não tenha acesso ao app, você pode solicitar a exclusão enviando um e-mail para <a href="mailto:guilherme@driftwheels.com.br" className="text-blue-400 hover:underline">guilherme@driftwheels.com.br</a>.
+  </p>
+</section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">5. Permissões do Dispositivo</h2>
