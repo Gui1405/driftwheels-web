@@ -71,14 +71,30 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-  <h2 className="text-2xl font-bold text-white mb-3">4. Exclusão de Dados</h2>
-  <p className="mb-2">
-    Você pode solicitar a exclusão completa da sua conta e dados diretamente no aplicativo em: <em>Perfil &gt; Configurações &gt; Zona de Perigo &gt; Deletar Conta</em>.
-  </p>
-  <p>
-    Alternativamente, caso não tenha acesso ao app, você pode solicitar a exclusão enviando um e-mail para <a href="mailto:guilherme@driftwheels.com.br" className="text-blue-400 hover:underline">guilherme@driftwheels.com.br</a>.
-  </p>
-</section>
+            <h2 className="text-2xl font-bold text-white mb-3">4. Exclusão de Dados</h2>
+            <p className="mb-2">
+              Você tem o direito de solicitar a exclusão total dos seus dados. Este processo é <strong>irreversível</strong> e removerá permanentemente seu:
+            </p>
+            <ul className="list-disc pl-5 space-y-1 mb-3 text-gray-400">
+                <li>Perfil, nome de usuário e foto;</li>
+                <li>Histórico completo de corridas e telemetria;</li>
+                <li>Credenciais de login.</li>
+            </ul>
+            <p className="mb-2">
+              <strong>Como solicitar:</strong>
+            </p>
+            <ul className="list-disc pl-5 space-y-2">
+                <li>
+                    <strong>No App:</strong> Vá em <em>Perfil &gt; Configurações &gt; Zona de Perigo &gt; Deletar Conta</em>. A exclusão ocorre imediatamente.
+                </li>
+                <li>
+                    <strong>Por E-mail:</strong> Caso não tenha mais acesso ao app, envie um pedido para <a href="mailto:guilherme@driftwheels.com.br" className="text-blue-400 hover:underline">guilherme@driftwheels.com.br</a>. Processaremos a solicitação manual em até 30 dias.
+                </li>
+            </ul>
+            <p className="text-sm text-gray-500 mt-2">
+                * Nota: O histórico de transações financeiras pode ser mantido pelas lojas (Apple/Google) para fins fiscais, conforme exigido por lei.
+            </p>
+          </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-3">5. Permissões do Dispositivo</h2>
