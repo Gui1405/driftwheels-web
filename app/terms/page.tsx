@@ -77,7 +77,7 @@ export default function TermsPage() {
 
           <div className="border-t border-gray-800 pt-8 mt-12">
             <h3 className="text-xl font-bold text-white mb-2">Contato</h3>
-            <p>Dúvidas? Envie um e-mail para: <span className="text-[#FFD700]">suporte@driftwheels.app</span></p>
+            <p>Dúvidas? Envie um e-mail para: <span className="text-[#FFD700]">guilherme@driftwheels.com.br</span></p>
           </div>
         </div>
       </div>

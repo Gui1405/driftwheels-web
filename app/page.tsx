@@ -194,7 +194,7 @@ export default function LandingPage() {
               <ul className="space-y-3 text-sm text-gray-400">
                 <li className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-amber-500" />
-                    <a href="mailto:suporte@driftwheels.app" className="hover:text-white transition-colors">suporte@driftwheels.app</a>
+                    <a href="mailto:guilherme@driftwheels.com.br" className="hover:text-white transition-colors">guilherme@driftwheels.com.br</a>
                 </li>
                 <li className="flex items-center gap-2">
                     <Instagram className="w-4 h-4 text-amber-500" />
