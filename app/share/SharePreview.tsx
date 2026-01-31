@@ -2,16 +2,24 @@
 
 import React, { useEffect, useState } from 'react';
 
+// Interface compatível com os dados que buscamos no Supabase
 interface SharePreviewProps {
   data: {
     username: string;
-    image: string;
+    image: string;      // Avatar principal
     caption?: string;
     car?: string;
     bio?: string;
-    avatar?: string;
-    // Dados extras opcionais
-    stats?: { posts: number; followers: number; bestScore: number };
+    avatar?: string;    // Avatar pequeno para posts
+    
+    // Dados estatísticos (Verifique se o page.tsx está enviando este objeto)
+    stats?: { 
+      posts: number; 
+      followers: number; 
+      bestScore: number; 
+    };
+    
+    // Lista de posts para a galeria
     lastPosts?: { id: string; imageUrl: string }[];
   };
   type: string;
@@ -22,7 +30,7 @@ interface SharePreviewProps {
 export default function SharePreview({ data, type, appScheme, fallbackUrl }: SharePreviewProps) {
   const [showModal, setShowModal] = useState(false);
 
-  // Tenta abrir o App assim que a página carrega (Deep Link)
+  // Tenta abrir o App automaticamente (Deep Link)
   useEffect(() => {
     const timer = setTimeout(() => {
         window.location.href = appScheme;
@@ -38,6 +46,9 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
   const IconHeart = () => <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>;
   const IconMessage = () => <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>;
   const IconShare = () => <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>;
+
+  // Cor principal (Laranja DriftWheels)
+  const ACCENT_COLOR = '#FF4500';
 
   return (
     <div style={{
@@ -60,7 +71,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         />
       </div>
 
-      {/* --- VISUALIZAÇÃO DE POST (MANTIDA IGUAL) --- */}
+      {/* --- VISUALIZAÇÃO DE POST --- */}
       {type === 'post' && (
         <div style={{ width: '100%', maxWidth: '500px', backgroundColor: '#000' }}>
           {/* Cabeçalho do Post */}
@@ -98,14 +109,14 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         </div>
       )}
 
-      {/* --- VISUALIZAÇÃO DE PERFIL (ATUALIZADA) --- */}
+      {/* --- VISUALIZAÇÃO DE PERFIL (Estilo OtherUserProfileModal) --- */}
       {type === 'profile' && (
-        <div style={{ width: '100%', maxWidth: '500px', padding: '30px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ width: '100%', maxWidth: '500px', padding: '30px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
             {/* Foto de Perfil Centralizada */}
             <div style={{ 
                 width: '110px', height: '110px', borderRadius: '50%', 
-                padding: '3px', border: '2px solid #FCA311', // Borda Amarela (Accent)
+                padding: '3px', border: `2px solid ${ACCENT_COLOR}`,
                 marginBottom: '15px' 
             }}>
                 <img 
@@ -128,15 +139,15 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                 padding:'15px 0', marginBottom: '25px', backgroundColor: '#0a0a0a', borderRadius: '8px'
             }}>
                 <div style={{ flex: 1, textAlign: 'center', borderRight: '1px solid #222' }}>
-                    <div style={{ fontWeight:'bold', fontSize:'18px', color: '#FFF' }}>{data.stats?.posts || 0}</div>
+                    <div style={{ fontWeight:'bold', fontSize:'18px', color: '#FFF' }}>{data.stats?.posts ?? '-'}</div>
                     <div style={{ fontSize:'10px', color:'#666', textTransform:'uppercase', marginTop:'4px' }}>Posts</div>
                 </div>
                 <div style={{ flex: 1, textAlign: 'center', borderRight: '1px solid #222' }}>
-                    <div style={{ fontWeight:'bold', fontSize:'18px', color: '#FCA311' }}>{data.stats?.bestScore || 0}</div>
+                    <div style={{ fontWeight:'bold', fontSize:'18px', color: ACCENT_COLOR }}>{data.stats?.bestScore ?? '-'}</div>
                     <div style={{ fontSize:'10px', color:'#666', textTransform:'uppercase', marginTop:'4px' }}>Recorde</div>
                 </div>
                 <div style={{ flex: 1, textAlign: 'center' }}>
-                    <div style={{ fontWeight:'bold', fontSize:'18px', color: '#FFF' }}>{data.stats?.followers || 0}</div>
+                    <div style={{ fontWeight:'bold', fontSize:'18px', color: '#FFF' }}>{data.stats?.followers ?? '-'}</div>
                     <div style={{ fontSize:'10px', color:'#666', textTransform:'uppercase', marginTop:'4px' }}>Seguidores</div>
                 </div>
             </div>
@@ -145,7 +156,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
             <button 
                 onClick={handleInteraction}
                 style={{ 
-                    width: '100%', padding: '14px', backgroundColor: '#FCA311', 
+                    width: '100%', padding: '14px', backgroundColor: ACCENT_COLOR, 
                     color:'#000', border: 'none', borderRadius: '10px', 
                     fontWeight: '900', cursor: 'pointer', fontSize:'14px', 
                     textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '30px'
@@ -154,24 +165,42 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                 Abrir no App
             </button>
 
-            {/* Grid de Últimas Fotos */}
+            {/* Grid de Fotos (Estilo 3 colunas igual ao App) */}
             {data.lastPosts && data.lastPosts.length > 0 && (
                 <div style={{ width: '100%' }}>
-                    <div style={{ fontSize: '11px', color: '#666', fontWeight: 'bold', marginBottom: '10px', paddingLeft: '5px' }}>
-                        ÚLTIMAS PUBLICAÇÕES
+                    <div style={{ fontSize: '12px', color: ACCENT_COLOR, fontWeight: 'bold', marginBottom: '10px', paddingLeft: '5px', letterSpacing:'1px' }}>
+                        GALERIA
                     </div>
-                    <div style={{ display: 'flex', gap: '4px' }}>
+                    
+                    {/* CSS Grid para 3 colunas perfeitas */}
+                    <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(3, 1fr)', // 3 colunas iguais
+                        gap: '2px', // Espaçamento pequeno igual ao modal
+                        width: '100%'
+                    }}>
                         {data.lastPosts.map((post: any) => (
                              <div 
                                 key={post.id} 
                                 onClick={handleInteraction}
                                 style={{ 
-                                    flex: 1, aspectRatio: '1/1', backgroundColor: '#111', 
-                                    borderRadius: '6px', overflow: 'hidden', cursor: 'pointer' 
+                                    aspectRatio: '1/1', // Garante que seja quadrado
+                                    backgroundColor: '#111', 
+                                    cursor: 'pointer',
+                                    position: 'relative'
                                 }}
                              >
-                                <img src={post.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <img 
+                                    src={post.imageUrl} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                    alt="Post"
+                                />
                              </div>
+                        ))}
+                        
+                        {/* Preenche o resto do grid se tiver menos de 3 fotos (opcional, para visual) */}
+                        {[...Array(Math.max(0, 3 - data.lastPosts.length))].map((_, i) => (
+                            <div key={`empty-${i}`} style={{ aspectRatio: '1/1', backgroundColor: '#111' }} />
                         ))}
                     </div>
                 </div>
@@ -195,12 +224,12 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                 />
                 <div style={{ marginLeft: '12px' }}>
                     <div style={{ fontSize: '13px', fontWeight: 'bold', color:'#fff' }}>DriftWheels</div>
-                    <div style={{ fontSize: '11px', color: '#FCA311' }}>Comunidade de Drift</div>
+                    <div style={{ fontSize: '11px', color: ACCENT_COLOR }}>Comunidade de Drift</div>
                 </div>
             </div>
             <button 
                 onClick={() => window.location.href = appScheme}
-                style={{ backgroundColor: '#FCA311', color: '#000', border: 'none', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer' }}
+                style={{ backgroundColor: ACCENT_COLOR, color: '#000', border: 'none', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer' }}
             >
                 ABRIR
             </button>
@@ -223,7 +252,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
             <img 
                 src="/assets/logo.png"
                 alt="Logo"
-                style={{ width: '60px', height: '60px', borderRadius: '15px', backgroundColor:'#000', border:'1px solid #FCA311', margin:'0 auto 20px', display:'block' }} 
+                style={{ width: '60px', height: '60px', borderRadius: '15px', backgroundColor:'#000', border:`1px solid ${ACCENT_COLOR}`, margin:'0 auto 20px', display:'block' }} 
             />
             
             <h2 style={{ fontSize: '18px', marginBottom: '10px', fontWeight:'bold', color: 'white' }}>Baixe o App</h2>
@@ -233,7 +262,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
 
             <a href={fallbackUrl} style={{
               display: 'block', width: '100%', padding: '14px',
-              backgroundColor: '#FCA311', color: '#000',
+              backgroundColor: ACCENT_COLOR, color: '#000',
               textDecoration: 'none', fontWeight: 'bold', borderRadius: '10px',
               marginBottom: '15px', fontSize:'14px'
             }}>
