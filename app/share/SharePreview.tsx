@@ -110,7 +110,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         </div>
       )}
 
-      {/* --- VISUALIZAÇÃO DE PERFIL (Estilo OtherUserProfileModal) --- */}
+      {/* --- VISUALIZAÇÃO DE PERFIL --- */}
       {type === 'profile' && (
         <div style={{ width: '100%', maxWidth: '500px', padding: '30px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
@@ -133,7 +133,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
             </p>
             {data.bio && <p style={{ color: '#ccc', fontSize: '13px', fontStyle:'italic', maxWidth:'80%', textAlign:'center', marginBottom: '20px' }}>"{data.bio}"</p>}
             
-            {/* Barra de Stats (Conectada com dados reais) */}
+            {/* Barra de Stats */}
             <div style={{ 
                 width: '100%', display: 'flex', justifyContent: 'center', gap: '0', 
                 borderTop:'1px solid #222', borderBottom:'1px solid #222', 
@@ -166,18 +166,17 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                 Abrir no App
             </button>
 
-            {/* Grid de Fotos (Estilo 3 colunas igual ao App) */}
+            {/* Grid de Fotos */}
             {data.lastPosts && data.lastPosts.length > 0 && (
                 <div style={{ width: '100%' }}>
                     <div style={{ fontSize: '12px', color: ACCENT_COLOR, fontWeight: 'bold', marginBottom: '10px', paddingLeft: '5px', letterSpacing:'1px' }}>
                         GALERIA
                     </div>
                     
-                    {/* CSS Grid para 3 colunas perfeitas */}
                     <div style={{ 
                         display: 'grid', 
-                        gridTemplateColumns: 'repeat(3, 1fr)', // 3 colunas iguais
-                        gap: '2px', // Espaçamento pequeno igual ao modal
+                        gridTemplateColumns: 'repeat(3, 1fr)', 
+                        gap: '2px', 
                         width: '100%'
                     }}>
                         {data.lastPosts.map((post: any) => (
@@ -185,7 +184,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                                 key={post.id} 
                                 onClick={handleInteraction}
                                 style={{ 
-                                    aspectRatio: '1/1', // Garante que seja quadrado
+                                    aspectRatio: '1/1', 
                                     backgroundColor: '#111', 
                                     cursor: 'pointer',
                                     position: 'relative'
@@ -198,8 +197,6 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                                 />
                              </div>
                         ))}
-                        
-                        {/* Preenche o resto do grid se tiver menos de 3 fotos para manter alinhamento (opcional) */}
                         {[...Array(Math.max(0, 3 - data.lastPosts.length))].map((_, i) => (
                             <div key={`empty-${i}`} style={{ aspectRatio: '1/1', backgroundColor: '#111' }} />
                         ))}
@@ -209,44 +206,56 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
         </div>
       )}
 
-      {/* --- VISUALIZAÇÃO DE PARTY (SESSÃO) - NOVO! --- */}
+      {/* --- VISUALIZAÇÃO DE PARTY (SESSÃO) --- */}
       {type === 'party' && (
         <div style={{ width: '100%', maxWidth: '500px', padding: '20px' }}>
-            {/* Card Estilo Convite */}
             <div style={{ backgroundColor: '#111', borderRadius: '16px', overflow: 'hidden', border: '1px solid #333' }}>
                 
-                {/* Imagem da Pista */}
-                <div style={{ width: '100%', height: '220px', position: 'relative' }} onClick={handleInteraction}>
+                {/* AQUI ESTÁ A CORREÇÃO:
+                  Fundo branco para o mapa aparecer e objectFit contain 
+                  para o desenho da pista não ser cortado 
+                */}
+                <div 
+                    style={{ 
+                        width: '100%', height: '220px', position: 'relative', 
+                        backgroundColor: '#FFFFFF', // Fundo BRANCO para contraste
+                        display: 'flex', alignItems: 'center', justifyContent: 'center' 
+                    }} 
+                    onClick={handleInteraction}
+                >
                     <img 
                         src={data.image} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        style={{ 
+                            width: '100%', height: '100%', 
+                            objectFit: 'contain', // Garante que o mapa apareça inteiro
+                            padding: '10px' // Respiro para não colar na borda
+                        }} 
                         alt="Pista" 
                     />
+                    
                     <div style={{ 
                         position: 'absolute', top: 12, right: 12, 
                         backgroundColor: ACCENT_COLOR, color: '#000', 
                         padding: '4px 10px', borderRadius: '6px', 
-                        fontWeight: 'bold', fontSize: '11px', textTransform: 'uppercase' 
+                        fontWeight: 'bold', fontSize: '11px', textTransform: 'uppercase',
+                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                     }}>
                         Sessão
                     </div>
                 </div>
 
                 <div style={{ padding: '20px' }}>
-                    {/* Título da Sessão */}
                     <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#fff', marginBottom: '8px', lineHeight: '1.2' }}>
-                        {data.username} {/* O page.tsx mapeia o Nome da Sessão para 'username' */}
+                        {data.username} 
                     </h2>
                     
-                    {/* Nome da Pista com Ícone */}
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
                          <IconMapPin />
                          <span style={{ fontSize: '14px', color: '#DDD', fontWeight: '500', marginLeft: '6px' }}>
-                            {data.car} {/* O page.tsx mapeia o Nome da Pista para 'car' */}
+                            {data.car} 
                          </span> 
                     </div>
                     
-                    {/* Descrição */}
                     {data.caption && (
                         <div style={{ backgroundColor: '#1A1A1A', padding: '12px', borderRadius: '8px', marginBottom: '20px' }}>
                             <p style={{ color: '#bbb', fontSize: '13px', lineHeight: '1.5', fontStyle: 'italic' }}>
