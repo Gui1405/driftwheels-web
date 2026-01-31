@@ -12,7 +12,7 @@ interface SharePreviewProps {
     bio?: string;
     avatar?: string;    // Avatar pequeno para posts
     
-    // Dados estatísticos (Verifique se o page.tsx está enviando este objeto)
+    // Dados estatísticos vindos do page.tsx
     stats?: { 
       posts: number; 
       followers: number; 
@@ -198,7 +198,7 @@ export default function SharePreview({ data, type, appScheme, fallbackUrl }: Sha
                              </div>
                         ))}
                         
-                        {/* Preenche o resto do grid se tiver menos de 3 fotos (opcional, para visual) */}
+                        {/* Preenche o resto do grid se tiver menos de 3 fotos para manter alinhamento (opcional) */}
                         {[...Array(Math.max(0, 3 - data.lastPosts.length))].map((_, i) => (
                             <div key={`empty-${i}`} style={{ aspectRatio: '1/1', backgroundColor: '#111' }} />
                         ))}
