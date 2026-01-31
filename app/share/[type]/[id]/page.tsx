@@ -14,7 +14,7 @@ interface Props {
   }>;
 }
 
-// Helper: Garante que a URL da imagem seja absoluta (Necessário para WhatsApp)
+// Helper: Garante que a URL da imagem seja absoluta
 const getImageUrl = (path: string | null, bucket: string) => {
     if (!path) return "https://driftwheels.app/assets/logo.png";
     if (path.startsWith('http')) return path;
@@ -22,7 +22,7 @@ const getImageUrl = (path: string | null, bucket: string) => {
 };
 
 // =====================================================================
-// 1. GERAR METADADOS (ISSO FAZ A FOTO APARECER NO WHATSAPP)
+// 1. GERAR METADADOS (WHATSAPP / TWITTER / FACEBOOK)
 // =====================================================================
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { type, id } = await params;
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // =====================================================================
-// 2. RENDERIZAÇÃO DA PÁGINA (VISUAL + DADOS)
+// 2. RENDERIZAÇÃO DA PÁGINA (BUSCA DE DADOS COMPLETOS)
 // =====================================================================
 export default async function SharePage({ params }: Props) {
   const { type, id } = await params;
@@ -75,7 +75,7 @@ export default async function SharePage({ params }: Props) {
   const appScheme = `driftwheels://${type}/${id}`;
   const fallbackUrl = "https://driftwheels.app";
 
-  // Objeto de dados unificado para a View
+  // Objeto base
   let viewData: any = { 
       username: 'DriftWheels', 
       image: 'https://driftwheels.app/assets/logo.png', 
@@ -85,6 +85,7 @@ export default async function SharePage({ params }: Props) {
   };
 
   try {
+    // --- CASO 1: POST INDIVIDUAL ---
     if (type === "post") {
         const { data: post } = await supabase
             .from("posts")
@@ -103,23 +104,46 @@ export default async function SharePage({ params }: Props) {
             };
         }
     } 
+    // --- CASO 2: PERFIL COMPLETO (ATUALIZADO) ---
     else if (type === "profile") {
         const { data: profile } = await supabase.from("profiles").select("*").eq("id", id).single();
+        
         if (profile) {
+            // Busca dados extras em paralelo para performance
+            const [postsCountRes, followersCountRes, bestRunRes, recentPostsRes] = await Promise.all([
+                // 1. Contagem de Posts
+                supabase.from('posts').select('*', { count: 'exact', head: true }).eq('user_id', id),
+                // 2. Contagem de Seguidores
+                supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following_id', id),
+                // 3. Melhor Pontuação (Recorde)
+                supabase.from('runs').select('total_points').eq('user_id', id).order('total_points', { ascending: false }).limit(1).single(),
+                // 4. Últimos 3 posts (com imagem)
+                supabase.from('posts').select('id, image_url').eq('user_id', id).not('image_url', 'is', null).order('created_at', { ascending: false }).limit(3)
+            ]);
+
             viewData = {
                 username: profile.username,
-                image: getImageUrl(profile.avatar_url, 'avatars'), // No perfil, a imagem principal é o avatar
+                // No perfil, usamos o avatar como imagem principal
+                image: getImageUrl(profile.avatar_url, 'avatars'), 
                 car: profile.car_model,
-                bio: profile.bio
+                bio: profile.bio,
+                // Dados extras para o layout de perfil
+                stats: {
+                    posts: postsCountRes.count || 0,
+                    followers: followersCountRes.count || 0,
+                    bestScore: bestRunRes.data?.total_points || 0
+                },
+                lastPosts: (recentPostsRes.data || []).map(p => ({
+                    id: p.id,
+                    imageUrl: getImageUrl(p.image_url, 'posts')
+                }))
             };
         }
     }
-    // Adicione lógica para 'party' se quiser mostrar card de sessão
   } catch (e) {
       console.log("Erro view data:", e);
   }
 
-  // Renderiza o componente Cliente (SharePreview) passando os dados já buscados
   return (
     <SharePreview 
         data={viewData} 
